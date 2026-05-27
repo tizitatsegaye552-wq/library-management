@@ -1,0 +1,46 @@
+@model LibraryManagement.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Log In";
+}
+
+<div class="auth-container">
+    <h2>Log in to your account</h2>
+    
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="text-danger">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+    }
+
+    <form asp-controller="Account" asp-action="Login" method="post">
+        <div class="form-group">
+            <label asp-for="Email">Email Address</label>
+            <input asp-for="Email" class="form-control" placeholder="name@company.com" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem;">
+            <input asp-for="RememberMe" type="checkbox" style="margin: 0;" />
+            <label asp-for="RememberMe" style="margin: 0;">Remember me</label>
+        </div>
+
+        <button type="submit" class="btn-submit">Log In</button>
+    </form>
+
+    <div class="auth-links">
+        Don't have an account? <a asp-action="Register">Sign up</a>
+    </div>
+
+    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted);">
+        <p style="margin:0 0 0.5rem 0;"><strong>Demo Accounts:</strong></p>
+        <p style="margin:0;">Admin: admin@library.com / admin123</p>
+        <p style="margin:0;">User: librarian@library.com / password123</p>
+    </div>
+</div>

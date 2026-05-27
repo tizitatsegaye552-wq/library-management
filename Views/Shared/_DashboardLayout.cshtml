@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Library Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            Library Management
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/Library" class="sidebar-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">Dashboard</a>
+            <a href="/Library/Books" class="sidebar-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Books" ? "active" : "")">Books</a>
+            <a href="/Library/Borrowers" class="sidebar-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Borrowers" ? "active" : "")">Borrowers</a>
+            <a href="/Library/Transactions" class="sidebar-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Transactions" ? "active" : "")">Transactions</a>
+            <a href="/Library/Overdue" class="sidebar-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Overdue" ? "active" : "")">Overdue</a>
+        </nav>
+        <div class="sidebar-footer">
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn-logout">Log out</button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="topbar">
+            <div class="user-info">
+                @User.Identity?.Name (@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value)
+            </div>
+        </header>
+
+        <main class="content-area">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success"]</div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+
+            @RenderBody()
+        </main>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

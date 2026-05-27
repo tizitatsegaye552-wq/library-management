@@ -1,0 +1,85 @@
+@model IReadOnlyList<LibraryManagement.Models.Book>
+@{
+    ViewData["Title"] = "Books Directory";
+}
+
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h1>Books Directory</h1>
+        <p>Manage library inventory and availability.</p>
+    </div>
+    <button class="btn btn-primary" onclick="document.getElementById('addBookModal').showModal()">+ Register New Book</button>
+</div>
+
+<dialog id="addBookModal" style="padding: 2rem; border: none; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-width: 500px; width: 100%; margin: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="margin: 0;">Register New Book</h3>
+        <button type="button" onclick="document.getElementById('addBookModal').close()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+    </div>
+    <form asp-controller="Library" asp-action="AddBook" method="post" style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="form-group" style="margin: 0;">
+            <label>Title</label>
+            <input type="text" name="Title" class="form-control" required />
+        </div>
+        <div class="form-group" style="margin: 0;">
+            <label>Author</label>
+            <input type="text" name="Author" class="form-control" required />
+        </div>
+        <div class="form-group" style="margin: 0;">
+            <label>Genre</label>
+            <input type="text" name="Genre" class="form-control" required />
+        </div>
+        <div class="form-group" style="margin: 0;">
+            <label>ISBN</label>
+            <input type="text" name="ISBN" class="form-control" required />
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('addBookModal').close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Book</button>
+        </div>
+    </form>
+</dialog>
+<style>
+    dialog::backdrop {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">All Books</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>ISBN</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model)
+            {
+                <tr>
+                    <td>@b.Id</td>
+                    <td style="font-weight:500;">@b.Title</td>
+                    <td>@b.Author</td>
+                    <td>@b.Genre</td>
+                    <td style="font-family: monospace; color: var(--text-muted);">@b.ISBN</td>
+                    <td>
+                        @if (b.IsAvailable)
+                        {
+                            <span class="badge badge-success">Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-warning">Checked Out</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

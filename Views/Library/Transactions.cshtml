@@ -1,0 +1,64 @@
+@model IReadOnlyList<LibraryManagement.Models.Transaction>
+@{
+    ViewData["Title"] = "Transaction History";
+}
+
+<div class="page-header">
+    <h1>Transaction History</h1>
+    <p>Complete log of all checkouts and returns.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">All Transactions</div>
+    <div class="card-body" style="padding: 0;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Book</th>
+                    <th>Borrower</th>
+                    <th>Checked Out</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Fee</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in Model.OrderByDescending(x => x.CheckedOutAt))
+                {
+                    <tr>
+                        <td>@t.Id</td>
+                        <td style="font-weight:500;">@t.BookTitle</td>
+                        <td>@t.BorrowerName</td>
+                        <td>@t.CheckedOutAt.ToString("MMM dd, yyyy")</td>
+                        <td>@t.DueDate.ToString("MMM dd, yyyy")</td>
+                        <td>
+                            @if (t.IsReturned)
+                            {
+                                <span class="badge badge-success">Returned</span>
+                            }
+                            else if (t.IsOverdue)
+                            {
+                                <span class="badge badge-danger">Overdue (@t.DaysOverdue days)</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">Active</span>
+                            }
+                        </td>
+                        <td>
+                            @if (t.LateFee > 0)
+                            {
+                                <span style="color: var(--danger); font-weight: 500;">$@t.LateFee.ToString("F2")</span>
+                            }
+                            else
+                            {
+                                <span style="color: var(--text-muted);">-</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

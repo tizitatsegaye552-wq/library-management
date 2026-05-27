@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Library Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/public.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="public-navbar">
+        <a class="public-brand" asp-controller="Home" asp-action="Index">Library Management</a>
+        <div class="public-nav-links">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Library" asp-action="Index" class="btn-primary">Go to Dashboard</a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login">Log in</a>
+                <a asp-controller="Account" asp-action="Register" class="btn-primary">Sign up</a>
+            }
+        </div>
+    </header>
+
+    <main class="public-main">
+        @RenderBody()
+    </main>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

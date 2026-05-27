@@ -1,0 +1,68 @@
+@model IReadOnlyList<LibraryManagement.Models.Borrower>
+@{
+    ViewData["Title"] = "Borrowers";
+}
+
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h1>Borrowers</h1>
+        <p>Manage library members.</p>
+    </div>
+    <button class="btn btn-primary" onclick="document.getElementById('addBorrowerModal').showModal()">+ Register New Borrower</button>
+</div>
+
+<dialog id="addBorrowerModal" style="padding: 2rem; border: none; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-width: 500px; width: 100%; margin: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="margin: 0;">Register New Borrower</h3>
+        <button type="button" onclick="document.getElementById('addBorrowerModal').close()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+    </div>
+    <form asp-controller="Library" asp-action="AddBorrower" method="post" style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="form-group" style="margin: 0;">
+            <label>Full Name</label>
+            <input type="text" name="Name" class="form-control" required />
+        </div>
+        <div class="form-group" style="margin: 0;">
+            <label>Email Address</label>
+            <input type="email" name="Email" class="form-control" required />
+        </div>
+        <div class="form-group" style="margin: 0;">
+            <label>Phone Number</label>
+            <input type="text" name="Phone" class="form-control" required />
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;">
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('addBorrowerModal').close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Borrower</button>
+        </div>
+    </form>
+</dialog>
+<style>
+    dialog::backdrop {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">Registered Members</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var bw in Model)
+            {
+                <tr>
+                    <td>@bw.Id</td>
+                    <td style="font-weight:500;">@bw.Name</td>
+                    <td>@bw.Email</td>
+                    <td>@bw.Phone</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

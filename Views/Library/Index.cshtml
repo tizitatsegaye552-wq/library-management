@@ -1,0 +1,114 @@
+@{
+    ViewData["Title"] = "Dashboard Overview";
+    var checkouts = (IReadOnlyList<LibraryManagement.Models.Transaction>)ViewBag.ActiveCheckouts;
+    var stats = (LibraryManagement.Services.StatisticsService)ViewBag.Stats;
+    var books = (IReadOnlyList<LibraryManagement.Models.Book>)ViewBag.Books;
+    var borrowers = (IReadOnlyList<LibraryManagement.Models.Borrower>)ViewBag.Borrowers;
+}
+
+<div class="page-header">
+    <h1>Overview</h1>
+    <p>Library statistics and quick actions.</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-box">
+        <div class="stat-box-title">Total Checkouts</div>
+        <div class="stat-box-value">@stats.TotalCheckouts</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-box-title">Total Returns</div>
+        <div class="stat-box-value">@stats.TotalReturns</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-box-title">Overdue Notices</div>
+        <div class="stat-box-value">@stats.TotalOverdueNotices</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-box-title">Fees Collected</div>
+        <div class="stat-box-value">$@stats.TotalFeesCollected.ToString("F2")</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Check Out Quick Action -->
+    <div class="card">
+        <div class="card-header">Check Out Book</div>
+        <div class="card-body">
+            <form asp-action="CheckOut" asp-controller="Library" method="post">
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label for="bookId">Book</label>
+                    <select id="bookId" name="bookId" class="form-control" required>
+                        <option value="">— Select Book —</option>
+                        @foreach (var b in books.Where(b => b.IsAvailable))
+                        {
+                            <option value="@b.Id">@b.Title</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="borrowerId">Borrower</label>
+                    <select id="borrowerId" name="borrowerId" class="form-control" required>
+                        <option value="">— Select Borrower —</option>
+                        @foreach (var bw in borrowers)
+                        {
+                            <option value="@bw.Id">@bw.Name</option>
+                        }
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Check Out</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Active Checkouts -->
+    <div class="card">
+        <div class="card-header">Recent Active Checkouts</div>
+        <div class="card-body" style="padding: 0;">
+            @if (!checkouts.Any())
+            {
+                <div style="padding: 1.5rem; color: var(--text-muted); text-align: center;">No active checkouts.</div>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>Borrower</th>
+                            <th>Due Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var t in checkouts.Take(5))
+                        {
+                            <tr>
+                                <td>@t.BookTitle</td>
+                                <td>@t.BorrowerName</td>
+                                <td>
+                                    @if (t.IsOverdue)
+                                    {
+                                        <span class="badge badge-danger">Overdue</span>
+                                    }
+                                    else
+                                    {
+                                        @t.DueDate.ToString("MMM dd")
+                                    }
+                                </td>
+                                <td>
+                                    <form asp-action="Return" asp-controller="Library" method="post" style="display:inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="transactionId" value="@t.Id" />
+                                        <button type="submit" class="btn btn-sm btn-primary">Return</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

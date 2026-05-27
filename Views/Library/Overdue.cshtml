@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Overdue Notice Management";
+    var overdueList = (IReadOnlyList<LibraryManagement.Models.Transaction>)ViewBag.OverdueTransactions;
+}
+
+<div class="page-header">
+    <h1>Overdue Management</h1>
+    <p>Trigger notices and manage overdue fees.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <span>Overdue Transactions (@overdueList.Count)</span>
+        <form asp-action="SendOverdueNotices" asp-controller="Library" method="post" style="margin: 0;">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger btn-sm" @(overdueList.Count == 0 ? "disabled" : "")>
+                Send All Notices
+            </button>
+        </form>
+    </div>
+
+    @if (!overdueList.Any())
+    {
+        <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+            No overdue books right now. All clear!
+        </div>
+    }
+    else
+    {
+        <div class="card-body" style="padding: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Book</th>
+                        <th>Borrower</th>
+                        <th>Due Date</th>
+                        <th>Days Overdue</th>
+                        <th>Accrued Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in overdueList)
+                    {
+                        <tr>
+                            <td>@t.Id</td>
+                            <td style="font-weight: 500;">@t.BookTitle</td>
+                            <td>@t.BorrowerName</td>
+                            <td>@t.DueDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <span class="badge badge-danger">@t.DaysOverdue Days</span>
+                            </td>
+                            <td style="font-weight: 600;">$@((t.DaysOverdue * 0.50m).ToString("F2"))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+    <div class="card-header">Notice Process Overview</div>
+    <div class="card-body">
+        <p style="margin-top: 0; color: var(--text-muted);">When you click <strong>Send All Notices</strong>, the following events occur for each overdue transaction via the EventBus:</p>
+        <ul style="color: var(--text-main); margin-bottom: 0;">
+            <li><strong style="color: var(--primary);">EmailHandler:</strong> Sends an overdue notice to the borrower's email.</li>
+            <li><strong style="color: var(--primary);">LoggingHandler:</strong> Writes an audit log entry for compliance.</li>
+            <li><strong style="color: var(--primary);">FeeHandler:</strong> Records the late fee against the transaction.</li>
+        </ul>
+    </div>
+</div>
