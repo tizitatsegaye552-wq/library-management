@@ -9,13 +9,13 @@
 
 | # | Name | Student ID |
 |---|------|-----------|
-| 1 | *(Bethlehem Addis )* | *(Df/ur38321/16)* |
-| 2 | *(Firdawek Negede )* | *(Ugr/35101/16)* |
-| 3 | *Girma Name )* | *(Ugr/35103/16)* |
-| 4 | *(Kalkidan H/mariyam )* | *(Df/ur38389/16)* |
-| 5 | *(Kidus Abel)* | *(Df/ur38395/16)* |
-| 6 | *(Kidus Birhanu)* | *( Df/ur38396/16)* |
-| 7 | *(Tizita Tsegaye )* | *(Ugr/35164/16)* |
+| 1 | *Bethlehem Addis * | *Df/ur38321/16* |
+| 2 | *Firdawek Negede * | *Ugr/35101/16* |
+| 3 | *Girma Name * | *Ugr/35103/16* |
+| 4 | *Kalkidan H/mariyam* | *Df/ur38389/16* |
+| 5 | *Kidus Abel* | *Df/ur38395/16* |
+| 6 | *Kidus Birhanu* | * Df/ur38396/16* |
+| 7 | *Tizita Tsegaye * | *Ugr/35164/16* |
 
 ---
 
