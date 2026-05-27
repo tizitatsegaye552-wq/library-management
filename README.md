@@ -11,6 +11,11 @@
 |---|------|-----------|
 | 1 | *(your name)* | *(your ID)* |
 | 2 | *(teammate)* | *(ID)* |
+| 1 | *(your name)* | *(your ID)* |
+| 2 | *(teammate)* | *(ID)* ||
+| 2 | *(teammate)* | *(ID)* |
+| 2 | *(teammate)* | *(ID)* |
+| 2 | *(teammate)* | *(ID)* |
 
 ---
 
